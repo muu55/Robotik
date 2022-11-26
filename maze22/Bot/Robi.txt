@@ -1,0 +1,8 @@
+Es werde Lichtsensor:
+
+white    : 	light: 68	rgb: 24 23 22	19
+red      : 	light: 25	rgb: 19  4  4	9
+black  : 	light:  6	rgb:  2  2  2	2
+silver   :	light: 126	rgb: 51 50 48	49
+
+

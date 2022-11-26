@@ -1,0 +1,31 @@
+#!/bin/sh
+#-----------------------------------------------------------------------
+# Pololu 2756 : Dual MC33926 Motor Driver for Raspberry Pi
+#
+# /boot/config.txt: dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4
+#
+# http://www.jumpnowtek.com/rpi/Using-the-Raspberry-Pi-Hardware-PWM-timers.html
+# 
+# need to be root for initial setup
+
+# 20kHz 
+period=$((1000000000/20000))
+
+for pin in 22 23 24 25 
+do gpio=/sys/class/gpio/gpio$pin
+  if [ ! -d "$gpio" ]; then echo $pin > /sys/class/gpio/export; fi
+  echo out > $gpio/direction
+  echo 0   > $gpio/value
+done
+
+for pin in 0 1
+do pwm=/sys/class/pwm/pwmchip0/pwm$pin
+  if [ ! -d "$pwm" ]; then echo $pin > /sys/class/pwm/pwmchip0/export; fi
+  chgrp -R gpio $pwm
+  chmod -R g+w  $pwm
+  echo $period > $pwm/period
+  echo $period > $pwm/duty_cycle
+  echo       1 > $pwm/enable
+done 
+
+#-----------------------------------------------------------------------
